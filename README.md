@@ -1,5 +1,6 @@
 # lpips-tensorflow
-Tensorflow port for the Learned Perceptual Image Patch Similarity (LPIPS) metric.
+Tensorflow port for the [PyTorch](https://github.com/richzhang/PerceptualSimilarity) implementation of the [Learned Perceptual Image Patch Similarity (LPIPS)](http://richzhang.github.io/PerceptualSimilarity/) metric.
+This is done by exporting the model from PyTorch to ONNX and then to TensorFlow.
 
 ## Getting started
 ### Installation
