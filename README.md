@@ -15,11 +15,6 @@ pip install -r requirements.txt
 ```
 
 ### Using the LPIPS metric
-This example computes the LPIPS distance between between example reference image [`ex_ref.png`](imgs/ex_ref.png) to distorted images [`ex_p0.png`](./imgs/ex_p0.png) and [`ex_p1.png`](imgs/ex_p1.png).
-```bash
-python test_network.py --model net-lin --net alex
-```
-
 The `lpips` TensorFlow function works with individual images or batches of images.
 It also works with images of any spatial dimensions (but the dimensions should be at least the size of the network's receptive field).
 This example computes the LPIPS distance between batches of images.
