@@ -42,7 +42,6 @@ with tf.Session() as session:
 - Clone the PerceptualSimilarity submodule.
 ```bash
 git submodule update --init --recursive
-git clone --recursive https://github.com/alexlee-gk/lpips-tensorflow.git
 ```
 - Install more dependencies.
 ```bash
