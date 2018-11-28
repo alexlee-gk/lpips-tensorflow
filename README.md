@@ -4,13 +4,13 @@ This is done by exporting the model from PyTorch to ONNX and then to TensorFlow.
 
 ## Getting started
 ### Installation
-- Clone this repo:
+- Clone this repo.
 ```bash
 git clone https://github.com/alexlee-gk/lpips-tensorflow.git
 cd lpips-tensorflow
 ```
 - Install TensorFlow and dependencies from http://tensorflow.org/
-- Install other dependencies
+- Install other dependencies.
 ```bash
 pip install -r requirements.txt
 ```
@@ -39,11 +39,12 @@ with tf.Session() as session:
 
 ## Exporting additional models
 ### Export PyTorch model to TensorFlow through ONNX
-- When clonning the repo, make sure the submodules are also cloned:
+- Clone the PerceptualSimilarity submodule.
 ```bash
+git submodule update --init --recursive
 git clone --recursive https://github.com/alexlee-gk/lpips-tensorflow.git
 ```
-- Install more dependencies
+- Install more dependencies.
 ```bash
 pip install -r requirements-dev.txt
 ```
