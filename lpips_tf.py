@@ -1,17 +1,18 @@
 import os
-import sys
 
 import tensorflow as tf
-from six.moves import urllib
 
 _URL = 'http://rail.eecs.berkeley.edu/models/lpips'
 
 
-def download(url, output_dir):
+def _download(url, output_dir):
     """Downloads the `url` file into `output_dir`.
 
     Modified from https://github.com/tensorflow/models/blob/master/research/slim/datasets/dataset_utils.py
     """
+    import sys
+    from six.moves import urllib
+
     filename = url.split('/')[-1]
     filepath = os.path.join(output_dir, filename)
 
@@ -61,7 +62,7 @@ def lpips(input0, input1, model='net-lin', net='alex', version=0.1):
     pb_fname = '%s_%s_v%s.pb' % (model, net, version)
     if not os.path.isfile(os.path.join(cache_dir, pb_fname)):
         os.makedirs(cache_dir, exist_ok=True)
-        download(os.path.join(_URL, pb_fname), cache_dir)
+        _download(os.path.join(_URL, pb_fname), cache_dir)
 
     with open(os.path.join(cache_dir, pb_fname), 'rb') as f:
         graph_def = tf.GraphDef()

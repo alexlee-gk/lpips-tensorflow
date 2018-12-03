@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 import tensorflow as tf
 
-import lpips
+import lpips_tf
 
 
 def load_image(fname):
@@ -29,7 +29,7 @@ def main():
     image0_ph = tf.placeholder(tf.float32)
     image1_ph = tf.placeholder(tf.float32)
     lpips_fn = session.make_callable(
-        lpips.lpips(image0_ph, image1_ph, model=args.model, net=args.net, version=args.version),
+        lpips_tf.lpips(image0_ph, image1_ph, model=args.model, net=args.net, version=args.version),
         [image0_ph, image1_ph])
 
     ex_d0 = lpips_fn(ex_ref, ex_p0)
