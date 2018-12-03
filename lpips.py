@@ -1,6 +1,29 @@
 import os
+import sys
 
 import tensorflow as tf
+from six.moves import urllib
+
+_URL = 'http://rail.eecs.berkeley.edu/models/lpips'
+
+
+def download(url, output_dir):
+    """Downloads the `url` file into `output_dir`.
+
+    Modified from https://github.com/tensorflow/models/blob/master/research/slim/datasets/dataset_utils.py
+    """
+    filename = url.split('/')[-1]
+    filepath = os.path.join(output_dir, filename)
+
+    def _progress(count, block_size, total_size):
+        sys.stdout.write('\r>> Downloading %s %.1f%%' % (
+            filename, float(count * block_size) / float(total_size) * 100.0))
+        sys.stdout.flush()
+
+    filepath, _ = urllib.request.urlretrieve(url, filepath, _progress)
+    print()
+    statinfo = os.stat(filepath)
+    print('Successfully downloaded', filename, statinfo.st_size, 'bytes.')
 
 
 def lpips(input0, input1, model='net-lin', net='alex', version=0.1):
@@ -33,8 +56,14 @@ def lpips(input0, input1, model='net-lin', net='alex', version=0.1):
     input1 = input1 * 2.0 - 1.0
 
     input0_name, input1_name = '0:0', '1:0'
-    pb_fname = os.path.join(os.path.dirname(__file__), 'models/v%s/%s_%s.pb' % (version, model, net))
-    with open(pb_fname, 'rb') as f:
+
+    cache_dir = os.path.expanduser('~/.lpips')
+    pb_fname = '%s_%s_v%s.pb' % (model, net, version)
+    if not os.path.isfile(os.path.join(cache_dir, pb_fname)):
+        os.makedirs(cache_dir, exist_ok=True)
+        download(os.path.join(_URL, pb_fname), cache_dir)
+
+    with open(os.path.join(cache_dir, pb_fname), 'rb') as f:
         graph_def = tf.GraphDef()
         graph_def.ParseFromString(f.read())
         _ = tf.import_graph_def(graph_def,

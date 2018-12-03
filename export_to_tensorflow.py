@@ -25,9 +25,10 @@ def main():
     dummy_im0 = torch.Tensor(1, 3, args.image_height, args.image_width)  # image should be RGB, normalized to [-1, 1]
     dummy_im1 = torch.Tensor(1, 3, args.image_height, args.image_width)
 
-    os.makedirs('models/v%s' % args.version, exist_ok=True)
-    onnx_fname = 'models/v%s/%s_%s.onnx' % (args.version, args.model, args.net)
-    pb_fname = 'models/v%s/%s_%s.pb' % (args.version, args.model, args.net)
+    cache_dir = os.path.expanduser('~/.lpips')
+    os.makedirs(cache_dir, exist_ok=True)
+    onnx_fname = os.path.join(cache_dir, '%s_%s_v%s.onnx' % (args.model, args.net, args.version))
+    pb_fname = os.path.join(cache_dir, '%s_%s_v%s.pb' % (args.model, args.net, args.version))
 
     # export model to onnx format
     torch.onnx.export(model.net, (dummy_im0, dummy_im1), onnx_fname, verbose=True)
