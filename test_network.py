@@ -15,8 +15,7 @@ def load_image(fname):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--model', choices=['net-lin', 'net', 'L2', 'SSIM'], default='net-lin',
-                        help='net-lin, net, L2, or SSIM')
+    parser.add_argument('--model', choices=['net-lin', 'net'], default='net-lin', help='net-lin or net')
     parser.add_argument('--net', choices=['squeeze', 'alex', 'vgg'], default='alex', help='squeeze, alex, or vgg')
     parser.add_argument('--version', type=str, default='0.1')
     args = parser.parse_args()
