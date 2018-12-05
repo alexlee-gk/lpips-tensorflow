@@ -39,9 +39,10 @@ with tf.Session() as session:
 
 ## Exporting additional models
 ### Export PyTorch model to TensorFlow through ONNX
-- Clone the PerceptualSimilarity submodule.
+- Clone the PerceptualSimilarity submodule and add it to the PYTHONPATH.
 ```bash
 git submodule update --init --recursive
+export PYTHONPATH=PerceptualSimilarity:$PYTHONPATH
 ```
 - Install more dependencies.
 ```bash
@@ -54,3 +55,4 @@ python export_to_tensorflow.py --model net-lin --net alex
 
 ### Known issues
 - The SqueezeNet model cannot be exported since ONNX cannot export one of the operators.
+- CPU is not supported because MaxPoolingOp only supports NHWC on device type CPU.
