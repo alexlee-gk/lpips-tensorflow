@@ -27,7 +27,6 @@ def main():
     cache_dir = os.path.expanduser('~/.lpips')
     os.makedirs(cache_dir, exist_ok=True)
     onnx_fname = os.path.join(cache_dir, '%s_%s_v%s.onnx' % (args.model, args.net, args.version))
-    pb_fname = os.path.join(cache_dir, '%s_%s_v%s.pb' % (args.model, args.net, args.version))
 
     # export model to onnx format
     torch.onnx.export(model.net, (dummy_im0, dummy_im1), onnx_fname, verbose=True)
@@ -41,6 +40,8 @@ def main():
     # needs to be imported after all the pytorch stuff, otherwise this causes a segfault
     from onnx_tf.backend import prepare
     tf_rep = prepare(model)
+    producer_version = tf_rep.graph.graph_def_versions.producer
+    pb_fname = os.path.join(cache_dir, '%s_%s_v%s_%d.pb' % (args.model, args.net, args.version, producer_version))
     tf_rep.export_graph(pb_fname)
     input0_name, input1_name = [tf_rep.tensor_dict[input_name].name for input_name in tf_rep.inputs]
     (output_name,) = [tf_rep.tensor_dict[output_name].name for output_name in tf_rep.outputs]

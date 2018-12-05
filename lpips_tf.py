@@ -58,8 +58,11 @@ def lpips(input0, input1, model='net-lin', net='alex', version=0.1):
 
     input0_name, input1_name = '0:0', '1:0'
 
+    default_graph = tf.get_default_graph()
+    producer_version = default_graph.graph_def_versions.producer
+
     cache_dir = os.path.expanduser('~/.lpips')
-    pb_fname = '%s_%s_v%s.pb' % (model, net, version)
+    pb_fname = '%s_%s_v%s_%d.pb' % (model, net, version, producer_version)
     if not os.path.isfile(os.path.join(cache_dir, pb_fname)):
         os.makedirs(cache_dir, exist_ok=True)
         _download(os.path.join(_URL, pb_fname), cache_dir)
@@ -69,7 +72,7 @@ def lpips(input0, input1, model='net-lin', net='alex', version=0.1):
         graph_def.ParseFromString(f.read())
         _ = tf.import_graph_def(graph_def,
                                 input_map={input0_name: input0, input1_name: input1})
-        distance, = tf.get_default_graph().get_operations()[-1].outputs
+        distance, = default_graph.get_operations()[-1].outputs
 
     if distance.shape.ndims == 4:
         distance = tf.squeeze(distance, axis=[-3, -2, -1])
