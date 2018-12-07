@@ -39,7 +39,7 @@ def main():
 
     # needs to be imported after all the pytorch stuff, otherwise this causes a segfault
     from onnx_tf.backend import prepare
-    tf_rep = prepare(model)
+    tf_rep = prepare(model, device='CPU')
     producer_version = tf_rep.graph.graph_def_versions.producer
     pb_fname = os.path.join(cache_dir, '%s_%s_v%s_%d.pb' % (args.model, args.net, args.version, producer_version))
     tf_rep.export_graph(pb_fname)
