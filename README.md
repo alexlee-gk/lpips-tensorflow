@@ -55,4 +55,3 @@ python export_to_tensorflow.py --model net-lin --net alex
 
 ### Known issues
 - The SqueezeNet model cannot be exported since ONNX cannot export one of the operators.
-- CPU is not supported because MaxPoolingOp only supports NHWC on device type CPU.
