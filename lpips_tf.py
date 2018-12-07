@@ -1,6 +1,8 @@
 import os
+import sys
 
 import tensorflow as tf
+from six.moves import urllib
 
 _URL = 'http://rail.eecs.berkeley.edu/models/lpips'
 
@@ -10,9 +12,6 @@ def _download(url, output_dir):
 
     Modified from https://github.com/tensorflow/models/blob/master/research/slim/datasets/dataset_utils.py
     """
-    import sys
-    from six.moves import urllib
-
     filename = url.split('/')[-1]
     filepath = os.path.join(output_dir, filename)
 
@@ -62,10 +61,20 @@ def lpips(input0, input1, model='net-lin', net='alex', version=0.1):
     producer_version = default_graph.graph_def_versions.producer
 
     cache_dir = os.path.expanduser('~/.lpips')
-    pb_fname = '%s_%s_v%s_%d.pb' % (model, net, version, producer_version)
-    if not os.path.isfile(os.path.join(cache_dir, pb_fname)):
-        os.makedirs(cache_dir, exist_ok=True)
-        _download(os.path.join(_URL, pb_fname), cache_dir)
+    os.makedirs(cache_dir, exist_ok=True)
+    # files to try. try a specific producer version, but fallback to the version-less version (latest).
+    pb_fnames = [
+        '%s_%s_v%s_%d.pb' % (model, net, version, producer_version),
+        '%s_%s_v%s.pb' % (model, net, version),
+    ]
+    for pb_fname in pb_fnames:
+        if not os.path.isfile(os.path.join(cache_dir, pb_fname)):
+            try:
+                _download(os.path.join(_URL, pb_fname), cache_dir)
+            except urllib.error.HTTPError:
+                pass
+        if os.path.isfile(os.path.join(cache_dir, pb_fname)):
+            break
 
     with open(os.path.join(cache_dir, pb_fname), 'rb') as f:
         graph_def = tf.GraphDef()
