@@ -39,7 +39,7 @@ def lpips(input0, input1, model='net-lin', net='alex', version=0.1):
     Returns:
         The Learned Perceptual Image Patch Similarity (LPIPS) distance.
 
-    Refenrece:
+    Reference:
         Richard Zhang, Phillip Isola, Alexei A. Efros, Eli Shechtman, Oliver Wang.
         The Unreasonable Effectiveness of Deep Features as a Perceptual Metric.
         In CVPR, 2018.
@@ -48,7 +48,7 @@ def lpips(input0, input1, model='net-lin', net='alex', version=0.1):
     batch_shape = tf.shape(input0)[:-3]
     input0 = tf.reshape(input0, tf.concat([[-1], tf.shape(input0)[-3:]], axis=0))
     input1 = tf.reshape(input1, tf.concat([[-1], tf.shape(input1)[-3:]], axis=0))
-    # NCHW to NHWC
+    # NHWC to NCHW
     input0 = tf.transpose(input0, [0, 3, 1, 2])
     input1 = tf.transpose(input1, [0, 3, 1, 2])
     # normalize to [-1, 1]
