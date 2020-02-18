@@ -60,7 +60,7 @@ def lpips(input0, input1, model='net-lin', net='alex', version=0.1):
     default_graph = tf.get_default_graph()
     producer_version = default_graph.graph_def_versions.producer
 
-    cache_dir = os.path.expanduser('~/.lpips')
+    cache_dir = os.path.expanduser('.lpips')
     os.makedirs(cache_dir, exist_ok=True)
     # files to try. try a specific producer version, but fallback to the version-less version (latest).
     pb_fnames = [
@@ -70,7 +70,7 @@ def lpips(input0, input1, model='net-lin', net='alex', version=0.1):
     for pb_fname in pb_fnames:
         if not os.path.isfile(os.path.join(cache_dir, pb_fname)):
             try:
-                _download(os.path.join(_URL, pb_fname), cache_dir)
+                _download(urllib.parse.urljoin(_URL, pb_fname), cache_dir)
             except urllib.error.HTTPError:
                 pass
         if os.path.isfile(os.path.join(cache_dir, pb_fname)):
