@@ -1,7 +1,7 @@
 import os
 import sys
-
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 from six.moves import urllib
 
 _URL = 'http://rail.eecs.berkeley.edu/models/lpips'
